@@ -7,16 +7,14 @@ mysql -u root --password=root -e "GRANT ALL PRIVILEGES ON wordpress_develop.* TO
 echo -e "\n DB operations done.\n\n"
 
 # Nginx Logs
-if [[ ! -d /srv/log/wordpress-develop ]]; then
-    mkdir -p /srv/log/wordpress-develop
-fi
-    touch /srv/log/wordpress-develop/src.error.log
-    touch /srv/log/wordpress-develop/src.access.log
-    touch /srv/log/wordpress-develop/build.access.log
-    touch /srv/log/wordpress-develop/build.access.log
+mkdir -p ${VVV_PATH_TO_SITE}/log
+touch ${VVV_PATH_TO_SITE}/log/src.error.log
+touch ${VVV_PATH_TO_SITE}/log/src.access.log
+touch ${VVV_PATH_TO_SITE}/log/build.access.log
+touch ${VVV_PATH_TO_SITE}/log/build.access.log
 
 # Checkout, install and configure WordPress trunk via develop.svn
-if [[ ! -d "/srv/www/wordpress-develop" ]]; then
+if [[ ! -d "${VVV_PATH_TO_SITE}/public_html" ]]; then
   echo "Checking out WordPress trunk. See https://develop.svn.wordpress.org/trunk"
   noroot svn checkout "https://develop.svn.wordpress.org/trunk/" "/tmp/wordpress-develop"
 
@@ -28,10 +26,10 @@ if [[ ! -d "/srv/www/wordpress-develop" ]]; then
   echo "Initializing grunt and creating build.wordpress-develop.dev, this may take several minutes."
   noroot grunt
 
-  echo "Moving WordPress develop to a shared directory, /srv/www/wordpress-develop"
-  mv /tmp/wordpress-develop /srv/www/
+  echo "Moving WordPress develop to a shared directory, ${VVV_PATH_TO_SITE}/public_html"
+  mv /tmp/wordpress-develop ${VVV_PATH_TO_SITE}/public_html
 
-  cd /srv/www/wordpress-develop/src/
+  cd ${VVV_PATH_TO_SITE}/public_html/src/
   echo "Creating wp-config.php for src.wordpress-develop.dev and build.wordpress-develop.dev."
   noroot wp core config --dbname=wordpress_develop --dbuser=wp --dbpass=wp --quiet --extra-php <<PHP
 // Match any requests made via xip.io.
@@ -49,13 +47,13 @@ PHP
 
   echo "Installing src.wordpress-develop.dev."
   noroot wp core install --url=src.wordpress-develop.dev --quiet --title="WordPress Develop" --admin_name=admin --admin_email="admin@local.dev" --admin_password="password"
-  cp /srv/config/wordpress-config/wp-tests-config.php /srv/www/wordpress-develop/
-  cd /srv/www/wordpress-develop/
+  cp /srv/config/wordpress-config/wp-tests-config.php ${VVV_PATH_TO_SITE}/public_html/
+  cd ${VVV_PATH_TO_SITE}/public_html/
 
 else
 
   echo "Updating WordPress develop..."
-  cd /srv/www/wordpress-develop/
+  cd ${VVV_PATH_TO_SITE}/public_html/
   if [[ -e .svn ]]; then
     svn up
   else
@@ -72,8 +70,8 @@ else
   noroot npm install &>/dev/null
 fi
 
-if [[ ! -d "/srv/www/wordpress-develop/build" ]]; then
+if [[ ! -d "${VVV_PATH_TO_SITE}/public_html/build" ]]; then
   echo "Initializing grunt in WordPress develop... This may take a few moments."
-  cd /srv/www/wordpress-develop/
+  cd ${VVV_PATH_TO_SITE}/public_html/
   grunt
 fi
