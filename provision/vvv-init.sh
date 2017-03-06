@@ -75,3 +75,5 @@ if [[ ! -d "${VVV_PATH_TO_SITE}/public_html/build" ]]; then
   cd ${VVV_PATH_TO_SITE}/public_html/
   grunt
 fi
+
+ln -sf ${VVV_PATH_TO_SITE}/bin/develop_git /home/vagrant/bin/develop_git
