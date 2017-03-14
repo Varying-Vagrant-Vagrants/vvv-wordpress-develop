@@ -1,14 +1,14 @@
 ################################################################
 # WordPress develop src nginx configuration
 #
-# http://src.wordpress-develop.dev - this server configuration is
+# http://{{SRC_DOMAIN_HERE}} - this server configuration is
 # setup to listen on port 80 for any requests coming in to
-# src.wordpress-develop.dev and use the {vvv_path_to_site}/public_html/src
+# {{SRC_DOMAIN_HERE}} and use the {vvv_path_to_site}/public_html/src
 # directory to serve them.
 server {
     listen       80;
     listen       443 ssl;
-    server_name  src.wordpress-develop.dev *.src.wordpress-develop.dev ~^src\.wordpress-develop\.\d+\.\d+\.\d+\.\d+\.xip\.io$;
+    server_name  {{SRC_DOMAINS_HERE}};
     root         {vvv_path_to_site}/public_html/src;
 
     error_log    {vvv_path_to_site}/log/src.error.log;
@@ -22,14 +22,14 @@ server {
 ################################################################
 # WordPress develop build nginx configuration
 #
-# http://build.wordpress-develop.dev - this server configuration is
+# http://{{BUILD_DOMAIN_HERE}} - this server configuration is
 # setup to listen on port 80 for any requests coming in to
-# build.wordpress-develop.dev and use the {vvv_path_to_site}/public_html/build
+# {{BUILD_DOMAIN_HERE}} and use the {vvv_path_to_site}/public_html/build
 # directory to serve them.
 server {
     listen       80;
     listen       443 ssl;
-    server_name  build.wordpress-develop.dev *.build.wordpress-develop.dev ~^build\.wordpress-develop\.\d+\.\d+\.\d+\.\d+\.xip\.io$;
+    server_name  {{BUILD_DOMAINS_HERE}};
     root         {vvv_path_to_site}/public_html/build;
 
     error_log    {vvv_path_to_site}/log/build.error.log;
