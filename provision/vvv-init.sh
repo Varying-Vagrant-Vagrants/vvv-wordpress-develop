@@ -1,5 +1,7 @@
 # Provision WordPress Develop
 
+WP_TYPE=`get_config_value 'wp_type' "single"`
+
 # Make a database, if we don't already have one
 echo -e "\nCreating database 'wordpress_develop' (if it's not already there)"
 mysql -u root --password=root -e "CREATE DATABASE IF NOT EXISTS wordpress_develop"
@@ -46,7 +48,16 @@ define( 'WP_DEBUG', true );
 PHP
 
   echo "Installing src.wordpress-develop.dev."
-  noroot wp core install --url=src.wordpress-develop.dev --quiet --title="WordPress Develop" --admin_name=admin --admin_email="admin@local.dev" --admin_password="password"
+
+  if [ "${WP_TYPE}" = "subdomain" ]; then
+    INSTALL_COMMAND="multisite-install --subdomains"
+  elif [ "${WP_TYPE}" = "subdirectory" ]; then
+    INSTALL_COMMAND="multisite-install"
+  else
+    INSTALL_COMMAND="install"
+  fi
+
+  noroot wp core ${INSTALL_COMMAND} --url=src.wordpress-develop.dev --quiet --title="WordPress Develop" --admin_name=admin --admin_email="admin@local.dev" --admin_password="password"
   cp /srv/config/wordpress-config/wp-tests-config.php ${VVV_PATH_TO_SITE}/public_html/
   cd ${VVV_PATH_TO_SITE}/public_html/
 
