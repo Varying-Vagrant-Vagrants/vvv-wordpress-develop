@@ -36,10 +36,14 @@ if [[ ! -d "${VVV_PATH_TO_SITE}/public_html" ]]; then
 if ( isset( \$_SERVER['HTTP_HOST'] ) && preg_match('/^tests\.wordpress-develop\.dev$|^(src|build)(\.wordpress-develop\.)\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(.xip.io)\z/', \$_SERVER['HTTP_HOST'] ) ) {
     define( 'WP_HOME', 'http://' . \$_SERVER['HTTP_HOST'] );
     define( 'WP_SITEURL', 'http://' . \$_SERVER['HTTP_HOST'] );
+    define( 'WP_CACHE_KEY_SALT', \$_SERVER['HTTP_HOST'] );
 } else if ( 'build' === basename( dirname( __FILE__ ) ) ) {
     // Allow (src|build).wordpress-develop.dev to share the same Database
     define( 'WP_HOME', 'http://build.wordpress-develop.dev' );
     define( 'WP_SITEURL', 'http://build.wordpress-develop.dev' );
+    define( 'WP_CACHE_KEY_SALT', 'build.wordpress-develop.dev' );
+} else {
+    define( 'WP_CACHE_KEY_SALT', 'src.wordpress-develop.dev' );
 }
 
 define( 'WP_DEBUG', true );
