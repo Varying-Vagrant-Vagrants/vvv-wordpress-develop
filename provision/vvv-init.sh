@@ -21,8 +21,8 @@ touch ${VVV_PATH_TO_SITE}/log/build.access.log
 
 # Checkout, install and configure WordPress trunk via develop.svn
 if [[ ! -d "${VVV_PATH_TO_SITE}/public_html" ]]; then
-  echo "Checking out WordPress trunk. See https://develop.svn.wordpress.org/trunk"
-  noroot svn checkout "https://develop.svn.wordpress.org/trunk/" "/tmp/${VVV_PATH_TO_SITE}"
+  echo "Checking out WordPress trunk from git://develop.git.wordpress.org/"
+  noroot git clone "git://develop.git.wordpress.org/" "/tmp/${VVV_PATH_TO_SITE}"
 
   cd /tmp/${VVV_PATH_TO_SITE}/src/
 
@@ -60,16 +60,10 @@ else
 
   echo "Updating WordPress develop..."
   cd ${VVV_PATH_TO_SITE}/public_html/
-  if [[ -e .svn ]]; then
-    svn up
+  if [[ $(git rev-parse --abbrev-ref HEAD) == 'master' ]]; then
+    git pull --no-edit git://develop.git.wordpress.org/ master
   else
-
-    if [[ $(git rev-parse --abbrev-ref HEAD) == 'master' ]]; then
-      git pull --no-edit git://develop.git.wordpress.org/ master
-    else
-      echo "Skip auto git pull on develop.git.wordpress.org since not on master branch"
-    fi
-
+    echo "Skip auto git pull on develop.git.wordpress.org since not on master branch"
   fi
 
   echo "Updating npm packages..."
@@ -81,5 +75,3 @@ if [[ ! -d "${VVV_PATH_TO_SITE}/public_html/build" ]]; then
   cd ${VVV_PATH_TO_SITE}/public_html/
   grunt
 fi
-
-ln -sf ${VVV_PATH_TO_SITE}/bin/develop_git /home/vagrant/bin/develop_git
