@@ -20,10 +20,10 @@ if [[ ! -d "${VVV_PATH_TO_SITE}/public_html" ]]; then
 
   cd /tmp/wordpress-develop/src/
 
-  echo "Installing local npm packages for src.wordpress-develop.dev, this may take several minutes."
+  echo "Installing local npm packages for src.wordpress-develop.test, this may take several minutes."
   noroot npm install
 
-  echo "Initializing grunt and creating build.wordpress-develop.dev, this may take several minutes."
+  echo "Initializing grunt and creating build.wordpress-develop.test, this may take several minutes."
   noroot grunt
 
   echo "Moving WordPress develop to a shared directory, ${VVV_PATH_TO_SITE}/public_html"
