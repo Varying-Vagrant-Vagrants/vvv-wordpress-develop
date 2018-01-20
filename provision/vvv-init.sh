@@ -21,7 +21,7 @@ if [[ ! -d "${VVV_PATH_TO_SITE}/public_html" ]]; then
   cd /tmp/wordpress-develop/src/
 
   echo "Installing local npm packages for src.wordpress-develop.test, this may take several minutes."
-  noroot npm install
+  noroot npm install --no-bin-links
 
   echo "Initializing grunt and creating build.wordpress-develop.test, this may take several minutes."
   noroot grunt
@@ -67,7 +67,7 @@ else
   fi
 
   echo "Updating npm packages..."
-  noroot npm install &>/dev/null
+  noroot npm install --no-bin-links &>/dev/null
 fi
 
 if [[ ! -d "${VVV_PATH_TO_SITE}/public_html/build" ]]; then
