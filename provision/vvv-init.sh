@@ -44,6 +44,9 @@ if ( isset( \$_SERVER['HTTP_HOST'] ) && preg_match('/^(src|build)(.wordpress-dev
 
 define( 'WP_DEBUG', true );
 PHP
+  
+  // Copy over the config file from src to build, since grunt already ran.
+  cp /srv/www/wordpress-develop/public_html/src/wp-config.php /srv/www/wordpress-develop/public_html/build/
 
   echo "Installing src.wordpress-develop.test."
   noroot wp core install --url=src.wordpress-develop.test --quiet --title="WordPress Develop" --admin_name=admin --admin_email="admin@local.test" --admin_password="password"
